@@ -5,8 +5,12 @@ import { Redirect } from 'react-router-dom';
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
+import * as request from "../../request/auth/request";
+import {
+  LOGIN_SUCCESS,
+} from "../../helpers/constant";
+import withErrorHandler from "../../helpers/withErrorHandler";
 
-import { login } from "../actions/auth";
 
 const required = (value) => {
   if (!value) {
@@ -18,22 +22,19 @@ const required = (value) => {
   }
 };
 
-const Login = (props) => {
+const Login = ({history}) => {
   const form = useRef();
   const checkBtn = useRef();
 
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const { isLoggedIn } = useSelector(state => state.auth);
-  const { message } = useSelector(state => state.message);
 
   const dispatch = useDispatch();
 
-  const onChangeUsername = (e) => {
-    const username = e.target.value;
-    setUsername(username);
+  const onChangeEmail = (e) => {
+    setEmail(e.target.value);
   };
 
   const onChangePassword = (e) => {
@@ -41,26 +42,23 @@ const Login = (props) => {
     setPassword(password);
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = withErrorHandler(async (e) => {
     e.preventDefault();
-
-    setLoading(true);
 
     form.current.validateAll();
 
     if (checkBtn.current.context._errors.length === 0) {
-      dispatch(login(username, password))
-        .then(() => {
-          props.history.push("/profile");
-          window.location.reload();
-        })
-        .catch(() => {
-          setLoading(false);
-        });
-    } else {
-      setLoading(false);
+      const { user, token } = await request.signInUser({email, password});
+      
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: { user },
+      })
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", token);
+      history.push('/profile');
     }
-  };
+  });
 
   if (isLoggedIn) {
     return <Redirect to="/profile" />;
@@ -77,13 +75,13 @@ const Login = (props) => {
 
         <Form onSubmit={handleLogin} ref={form}>
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="email">Email</label>
             <Input
               type="text"
               className="form-control"
-              name="username"
-              value={username}
-              onChange={onChangeUsername}
+              name="email"
+              value={email}
+              onChange={onChangeEmail}
               validations={[required]}
             />
           </div>
@@ -101,21 +99,11 @@ const Login = (props) => {
           </div>
 
           <div className="form-group">
-            <button className="btn btn-primary btn-block" disabled={loading}>
-              {loading && (
-                <span className="spinner-border spinner-border-sm"></span>
-              )}
+            <button className="btn btn-primary btn-block">
               <span>Login</span>
             </button>
           </div>
 
-          {message && (
-            <div className="form-group">
-              <div className="alert alert-danger" role="alert">
-                {message}
-              </div>
-            </div>
-          )}
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>
       </div>

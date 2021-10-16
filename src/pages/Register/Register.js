@@ -1,12 +1,13 @@
 import React, { useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
-
-import { register } from "../actions/auth";
+import * as request from '../../request/auth/request';
+import withErrorHandler from '../../helpers/withErrorHandler';
+import { notification } from "antd";
 
 const required = (value) => {
   if (!value) {
@@ -48,21 +49,24 @@ const vpassword = (value) => {
   }
 };
 
-const Register = () => {
+const Register = ({history}) => {
   const form = useRef();
   const checkBtn = useRef();
 
-  const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [successful, setSuccessful] = useState(false);
 
-  const { message } = useSelector(state => state.message);
-  const dispatch = useDispatch();
 
-  const onChangeUsername = (e) => {
-    const username = e.target.value;
-    setUsername(username);
+  const onChangeFirstName = (e) => {
+    const firstName = e.target.value;
+    setFirstName(firstName);
+  };
+  const onChangeLastName = (e) => {
+    const lastName = e.target.value;
+    setLastName(lastName);
   };
 
   const onChangeEmail = (e) => {
@@ -75,7 +79,13 @@ const Register = () => {
     setPassword(password);
   };
 
-  const handleRegister = (e) => {
+  const openNotification = (type, message) => {
+    notification[type]({
+      message,
+    });
+  };
+
+  const handleRegister = withErrorHandler(async (e) => {
     e.preventDefault();
 
     setSuccessful(false);
@@ -83,15 +93,14 @@ const Register = () => {
     form.current.validateAll();
 
     if (checkBtn.current.context._errors.length === 0) {
-      dispatch(register(username, email, password))
-        .then(() => {
-          setSuccessful(true);
-        })
-        .catch(() => {
-          setSuccessful(false);
-        });
+      const response = await request.signUpUser({first_name: firstName, last_name: lastName, email, password});
+      if(response.status === 200) {
+        setSuccessful(true);
+        openNotification('success', 'User SignUp Sucessfull. Please log in');
+        history.push('/login');
+      }
     }
-  };
+  });
 
   return (
     <div className="col-md-12">
@@ -106,13 +115,24 @@ const Register = () => {
           {!successful && (
             <div>
               <div className="form-group">
-                <label htmlFor="username">Username</label>
+                <label htmlFor="firstName">First Name</label>
                 <Input
                   type="text"
                   className="form-control"
-                  name="username"
-                  value={username}
-                  onChange={onChangeUsername}
+                  name="firstName"
+                  value={firstName}
+                  onChange={onChangeFirstName}
+                  validations={[required, vusername]}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="lastName">Last Name</label>
+                <Input
+                  type="text"
+                  className="form-control"
+                  name="lastName"
+                  value={lastName}
+                  onChange={onChangeLastName}
                   validations={[required, vusername]}
                 />
               </div>
@@ -147,13 +167,6 @@ const Register = () => {
             </div>
           )}
 
-          {message && (
-            <div className="form-group">
-              <div className={ successful ? "alert alert-success" : "alert alert-danger" } role="alert">
-                {message}
-              </div>
-            </div>
-          )}
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>
       </div>
