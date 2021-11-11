@@ -34,6 +34,7 @@ const Sales = () => {
   const [salesData, setSalesData] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const [loader, setLoader] = useState(false);
 
   const columns = [
   {
@@ -72,8 +73,10 @@ const Sales = () => {
 ];
 
   const loadData = async () => {
+    setLoader(true);
     const { data: sales } = await request.getAllSalesData();
     setSalesData(sales);
+    setLoader(false);
   };
 
   const handleOk = () => setIsModalVisible(false);
@@ -84,7 +87,7 @@ const Sales = () => {
   }, []);
   return (
     <div>
-      <Table dataSource={salesData} columns={columns}></Table>
+      <Table dataSource={salesData} columns={columns} loading={loader}></Table>
       <Modal title="Sold Product Details" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <Table dataSource={selectedProducts} columns={productColumns}></Table>
       </Modal>

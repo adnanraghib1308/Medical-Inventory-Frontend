@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {formItemLayout, tailFormItemLayout} from "../../theme/_formLayout";
-import {Button, Form, Input, InputNumber, Typography, Row, Col, notification} from "antd";
+import {Button, Form, Input, InputNumber, Typography, Row, Col, notification, Spin} from "antd";
 import * as request from '../../request/billing/request'
 import ProductList from './ProductList';
 import withErrorHandler from "../../helpers/withErrorHandler";
@@ -17,6 +17,7 @@ const Billing = (props) => {
   const [productDetail, setProductDetail] = useState([]);
   const [filePath, setFilePath] = useState(null);
   const [productQuantities, setProductQuantities] = useState({});
+  const [loader, setLoader] = useState(false);
 
   const openNotification = ({ message }) => {
     notification.success({
@@ -33,9 +34,12 @@ const Billing = (props) => {
             return data;
           })
           values.products = productDetailWithQuantity;
+          setLoader(true);
           const filePathResponse = await request.generateFilePath(values);
+          setLoader(false);
           setFilePath(filePathResponse);
         } catch (error) {
+          setLoader(false);
           throw error;
         }
         openNotification({ message: "Bill Generation Successful. Please download." });
@@ -53,6 +57,7 @@ const Billing = (props) => {
    };
   return (
     <div>
+      <Spin spinning={loader}>
       <Form {...formItemLayout}>
         <Title level={2}>Customer Details</Title>
         {filePath && (
@@ -120,6 +125,7 @@ const Billing = (props) => {
         productQuantities={productQuantities}
         setProductQuantities={setProductQuantities}
       />
+      </Spin>
     </div>
   );
 }

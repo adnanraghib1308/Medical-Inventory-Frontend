@@ -29,16 +29,19 @@ const columns = [
 const ListInventory = () => {
 
   const [products, setProducts] = useState([]);
+  const [loader, setLoader] = useState(false);
   const loadData = async () => {
+    setLoader(true)
     const {data: productData} = await request.getAllProducts();
     setProducts(productData);
+    setLoader(false);
   }
   useEffect(() => {
     loadData();
   }, [])
   return (
     <div>
-      <Table dataSource={products} columns={columns}>
+      <Table dataSource={products} columns={columns} loading={loader}>
 
       </Table>
     </div>
