@@ -11,8 +11,13 @@ const Home = () => {
     getDataFromBackend();
   }, [])
   return (
-    <div className="container">
-      { data }
+    <div style = {{textAlign: 'center'}}>
+      <img
+        src="https://www.assetinfinity.com/blog/wp-content/uploads/2019/09/Hospital-Inventory-Management-Software.jpg"
+        width="1000"
+        height="600"
+      />
+      <h4>Open Soucre Project</h4>
     </div>
   );
 };
