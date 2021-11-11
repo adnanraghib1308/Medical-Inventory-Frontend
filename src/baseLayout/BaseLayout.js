@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import "antd/dist/antd.css";
 import { Menu, Button, Layout, Typography, Icon, Row, Col } from "antd";
 import { Link } from "react-router-dom";
-import styles from "./BaseLayout.module.scss";
 import { LOGOUT } from '../helpers/constant';
 
 const { Header, Content, Footer, Sider } = Layout;
