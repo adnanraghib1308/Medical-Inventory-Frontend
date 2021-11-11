@@ -1,6 +1,10 @@
 const LOGIN_SUCCESS = 'login';
 const LOGOUT = 'logout';
 
+const BASE_API_URL = "http://ec2-3-138-121-146.us-east-2.compute.amazonaws.com:8000/api/";
+const LOCAL_BASE_URL = "http://localhost:8000/api/";
+const isProduction = true;
+
 const AddManuallyCard = {
   type: "add",
   title: "Add Manually",
@@ -19,5 +23,8 @@ module.exports = {
   LOGIN_SUCCESS,
   LOGOUT,
   AddManuallyCard,
-  StockListCard
+  StockListCard,
+  BASE_API_URL,
+  LOCAL_BASE_URL,
+  isProduction,
 };
