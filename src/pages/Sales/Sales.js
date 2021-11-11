@@ -1,6 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { Button, Table, Modal } from "antd";
 import * as request from "../../request/sales/request";
+const { isProduction, BASE_API_URL, LOCAL_BASE_URL} = require('../../helpers/constant');
+
+const API_URL = isProduction ? BASE_API_URL : LOCAL_BASE_URL;
 
 
 
@@ -59,7 +62,7 @@ const Sales = () => {
         }}>View Product</Button>
         <a
           target="_blank"
-          href={`http://localhost:8000/api/billing/download/?file_path=${record.bill_path}`}
+          href={`${API_URL}billing/download/?file_path=${record.bill_path}`}
         >
           <Button type="primary">Download invoice</Button>
         </a>

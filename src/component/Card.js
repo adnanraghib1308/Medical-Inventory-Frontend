@@ -8,12 +8,10 @@ const Card = (props) => {
   const handleOnclick = () => {
 
     if(type === "add"){
-      console.log("hellllll.....");
-      //return <Link to="/inventory/add" />;
       history.push('/inventory/add');
     }
     else if(type === "list"){
-      return <Link to="/inventory/list" />;
+      history.push("/inventory/list");
     }
   }
   return (

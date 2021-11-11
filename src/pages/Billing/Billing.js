@@ -4,6 +4,9 @@ import {Button, Form, Input, InputNumber, Typography, Row, Col, notification} fr
 import * as request from '../../request/billing/request'
 import ProductList from './ProductList';
 import withErrorHandler from "../../helpers/withErrorHandler";
+const { isProduction, BASE_API_URL, LOCAL_BASE_URL} = require('../../helpers/constant');
+
+const API_URL = isProduction ? BASE_API_URL : LOCAL_BASE_URL;
 
 
 const { Title } = Typography;
@@ -56,7 +59,7 @@ const Billing = (props) => {
           <a
             target="_blank"
             style={{ paddingBottom: "10px" }}
-            href={`http://localhost:8000/api/billing/download/?file_path=${filePath}`}
+            href={`${API_URL}billing/download/?file_path=${filePath}`}
           >
             <Button type="primary">Download invoice</Button>
           </a>
