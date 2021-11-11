@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "antd/dist/antd.css";
 import { Menu, Button, Layout, Typography, Icon, Row, Col } from "antd";
 import { Link } from "react-router-dom";
+import styles from "./BaseLayout.module.scss";
 import { LOGOUT } from '../helpers/constant';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -60,6 +61,7 @@ const SideMenu = () => {
   const menuArray = isLoggedIn ? loggedInMenuArray : loggedOutMenuArray;
   return (
       <Menu
+        style={{marginTop: '20px'}}
         defaultSelectedKeys={['1']}
         defaultOpenKeys={['sub1']}
         mode="inline"
@@ -69,7 +71,7 @@ const SideMenu = () => {
           return (
             <Menu.Item key={tab.key}>
               <Link to={tab.linkTo}>
-                <Icon type={tab.iconType} filled="true" />
+                <Icon type={tab.iconType} filled="true" style={{color: '#fff', fontSize: '22px'}} />
                 <span className="nav-text">{tab.tabName}</span>
               </Link>
             </Menu.Item>
@@ -99,6 +101,7 @@ const BaseLayout = ({ user, children, sider = {}}) => {
   return(
     <Layout>
       <Sider
+        style={{overflow: 'auto', height: '100vh', position: 'relative', left: 0}}
         breakpoint="lg"
         width={230}
         collapsedWidth={0}
@@ -107,13 +110,14 @@ const BaseLayout = ({ user, children, sider = {}}) => {
       > 
         <SideMenu />
       </Sider>
-      <Layout >
+      <Layout style={{minHeight: '100vh', marginLeft:0, height: '100vh'}}>
         <Header style={{paddingLeft: 20}}>
           <Row>
             <Col span = {2}>
               <Icon
                 type={menuToggleState ? "menu-unfold": "menu-fold"}
                 onClick={collapseTrigger}
+                style={{color: '#fff', fontSize: '30px', float: 'left', marginTop: '17px'}}
               />
             </Col>
             <Col span = {20}>
@@ -124,7 +128,7 @@ const BaseLayout = ({ user, children, sider = {}}) => {
             </Col>
           </Row>
         </Header>
-          <Content>
+          <Content style={{minHeight: '100vh', marginLeft:0, height: '100vh'}}>
             {children}
           </Content>
       </Layout>
