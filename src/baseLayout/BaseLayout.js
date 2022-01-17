@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import "antd/dist/antd.css";
-import { Menu, Button, Layout, Typography, Icon, Row, Col } from "antd";
+import { Menu, Button, Layout, Typography,  Row, Col } from "antd";
 import { Link } from "react-router-dom";
-import styles from "./BaseLayout.module.scss";
 import { LOGOUT } from '../helpers/constant';
+import { HomeOutlined,  PlusCircleOutlined, DoubleRightOutlined, CheckOutlined, ProfileOutlined, LoginOutlined, UserAddOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Title } = Typography;
@@ -16,13 +16,13 @@ const SideMenu = () => {
     {
       key: "login",
       linkTo: "/login",
-      iconType: "login",
+      iconType: <LoginOutlined style={{color: '#fff', fontSize: '22px'}} />,
       tabName: "Login",
     },
     {
       key: "signup",
       linkTo: "/register",
-      iconType: "user",
+      iconType: <UserAddOutlined style={{color: '#fff', fontSize: '22px'}} />,
       tabName: "Sign Up",
     }
   ]
@@ -30,38 +30,38 @@ const SideMenu = () => {
     {
       key: "home",
       linkTo: "/",
-      iconType: "home",
+      iconType: <HomeOutlined style={{color: '#fff', fontSize: '22px'}} />,
       tabName: "Home",
     },
     {
       key: "inventory",
       linkTo: "/inventory",
-      iconType: "plus-circle",
+      iconType: <PlusCircleOutlined style={{color: '#fff', fontSize: '22px'}} /> ,
       tabName: "Inventory",
     },
     {
       key: "billing",
       linkTo: "/bill",
-      iconType: "double-right",
+      iconType: <DoubleRightOutlined style={{color: '#fff', fontSize: '22px'}} />,
       tabName: "Billing",
     },
     {
       key: "sales",
       linkTo: "/sales",
-      iconType: "check",
+      iconType: <CheckOutlined style={{color: '#fff', fontSize: '22px'}} />,
       tabName: "Sales",
     },
     {
       key: "profile",
       linkTo: "/profile",
-      iconType: "profile",
+      iconType: <ProfileOutlined style={{color: '#fff', fontSize: '22px'}} />,
       tabName: "Profile",
     },
   ];
   const menuArray = isLoggedIn ? loggedInMenuArray : loggedOutMenuArray;
   return (
       <Menu
-        className={styles['menu']}
+        style={{marginTop: '20px'}}
         defaultSelectedKeys={['1']}
         defaultOpenKeys={['sub1']}
         mode="inline"
@@ -71,7 +71,8 @@ const SideMenu = () => {
           return (
             <Menu.Item key={tab.key}>
               <Link to={tab.linkTo}>
-                <Icon type={tab.iconType} filled="true" className={styles['menu-item-icon']} />
+                {tab.iconType}
+                {/*<Icon type={tab.iconType} filled="true" style={{color: '#fff', fontSize: '22px'}} />*/}
                 <span className="nav-text">{tab.tabName}</span>
               </Link>
             </Menu.Item>
@@ -99,9 +100,9 @@ const BaseLayout = ({ user, children, sider = {}}) => {
   const userLogin = () => (<Link to='/login' />)
 
   return(
-    <Layout>
+    <Layout style={{height: "100vh"}}>
       <Sider
-        className = {styles['sider']}
+        style={{overflow: 'auto', height: "100vh", position: 'relative', left: 0}}
         breakpoint="lg"
         width={230}
         collapsedWidth={0}
@@ -110,15 +111,12 @@ const BaseLayout = ({ user, children, sider = {}}) => {
       > 
         <SideMenu />
       </Sider>
-      <Layout className={styles['content-container']}>
+      <Layout style={{overflow: 'auto'}}>
         <Header style={{paddingLeft: 20}}>
           <Row>
             <Col span = {2}>
-              <Icon
-                type={menuToggleState ? "menu-unfold": "menu-fold"}
-                onClick={collapseTrigger}
-                className={styles['menu-fold-unfold-icon']}
-              />
+              {menuToggleState && <MenuFoldOutlined onClick={collapseTrigger} style={{color: '#fff', fontSize: '30px', float: 'left', marginTop: '17px'}}/>}
+              {!menuToggleState && <MenuUnfoldOutlined onClick={collapseTrigger} style={{color: '#fff', fontSize: '30px', float: 'left', marginTop: '17px'}}/>}
             </Col>
             <Col span = {20}>
               <Title style={{color: "#fff", margin: 10, textAlign: 'center'}} level={2}>{'Medical Inventory Management'}</Title>
@@ -128,7 +126,7 @@ const BaseLayout = ({ user, children, sider = {}}) => {
             </Col>
           </Row>
         </Header>
-          <Content className={styles['.content-container']}>
+          <Content >
             {children}
           </Content>
       </Layout>

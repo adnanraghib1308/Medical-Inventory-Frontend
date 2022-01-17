@@ -4,10 +4,12 @@ const { isProduction, BASE_API_URL, LOCAL_BASE_URL} = require('../../helpers/con
 
 const API_URL = isProduction ? BASE_API_URL : LOCAL_BASE_URL;
 
-export const getHomePageData = async () => {
-  return axios.get(`${API_URL}home/`, {
-    headers: {
-      'token': `Bearer ${getJwtToken()}`
-    }
-  }).then(res => res.data);
-}
+export const getAllSalesData = async (filter) => {
+  return axios
+    .post(`${API_URL}sales/`, filter, {
+      headers: {
+        token: `Bearer ${getJwtToken()}`,
+      },
+    })
+    .then((res) => res.data);
+};

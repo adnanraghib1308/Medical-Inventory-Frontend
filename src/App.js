@@ -14,15 +14,17 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Billing from './pages/Billing';
-import Inventory from './pages/Inventory';
 import Sales from './pages/Sales';
+import InventoryHome from './pages/Inventory/InventoryHome';
+import AddInventory from "./pages/Inventory/AddInventory";
+import ListInventory from "./pages/Inventory/ListInventory";
 
 import { history } from "./helpers/history";
 
 const App = () => {
+  console.log(">>>>history>>>>", history);
   return (
     <Router history={history}>
-      <div>
         <BaseLayout>
           <div className="container mt-3">
             <Switch>
@@ -30,15 +32,15 @@ const App = () => {
               <Route exact path="/register" component={Register} />
               <ProtectedRoute exact path="/" component={Home} />
               <ProtectedRoute exact path="/profile" component={Profile} />
-              <ProtectedRoute exact path="/inventory" component={Inventory} />
+              <ProtectedRoute exact path="/inventory" component={InventoryHome} />
+              <ProtectedRoute exact path="/inventory/add" component={AddInventory} />
+              <ProtectedRoute exact path="/inventory/edit/:id" component={AddInventory} />
+              <ProtectedRoute exact path="/inventory/list" component={ListInventory} />
               <ProtectedRoute exact path="/bill" component={Billing} />
               <ProtectedRoute exact path="/sales" component={Sales} />
             </Switch>
           </div>
         </BaseLayout>
-
-        {/* <AuthVerify logOut={logOut}/> */}
-      </div>
     </Router>
   );
 };
