@@ -14,10 +14,9 @@ export const searchProduct = async (searchString) => {
     }).then( res => res.data.data)
 };
 
-export const generateFilePath = async (data) => {
+export const makeSale = async (data) => {
   return axios
-    .post(`${API_URL}billing/generate-bill`, {
-      ...data,
+    .post(`${API_URL}billing/generate-bill`, data,{
       headers: {
           token: `Bearer ${getJwtToken()}`,
       },

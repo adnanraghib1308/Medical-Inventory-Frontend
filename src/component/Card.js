@@ -1,6 +1,7 @@
 import React from 'react'
 import { Icon } from 'antd';
 import { Redirect, Link, useHistory } from "react-router-dom";
+import {PlusOutlined } from "@ant-design/icons"
 
 const Card = (props) => {
   const {type, title, imageLink, buttonText} = props;
@@ -21,7 +22,7 @@ const Card = (props) => {
         <img src={imageLink} style={{marginBottom: "20px"}}/>
         <br />
         <button className="btn btn-primary" onClick = {handleOnclick}>
-          <Icon type="plus" />   {buttonText}
+          <PlusOutlined />   {buttonText}
         </button>
       </div>
     </div>

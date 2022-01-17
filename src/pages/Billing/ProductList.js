@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
-import { List, Button, Icon, Card, Input, InputNumber, Divider } from 'antd'
+import { List, Button, Card, Input, InputNumber, Divider } from 'antd';
+import { PlusCircleOutlined, SearchOutlined, FolderOutlined, MinusCircleOutlined  } from '@ant-design/icons'
 
 const list = [
   {
@@ -55,7 +56,7 @@ const ProductList = (props) => {
       <Card>
         <Divider orientation="left">
           {" "}
-          <Icon type="folder" theme="twoTone" /> My Bag
+          <FolderOutlined /> My Bag
         </Divider>
         <List
           itemLayout="horizontal"
@@ -75,7 +76,7 @@ const ProductList = (props) => {
                 shape="circle"
                 type="primary"
               >
-                <Icon type="minus" />
+                <MinusCircleOutlined />
               </Button>
             </List.Item>
           )}
@@ -89,7 +90,7 @@ const ProductList = (props) => {
       <div>
         <Divider orientation="left">
           {" "}
-          <Icon type="search" theme="twoTone" /> Search Results
+          <SearchOutlined /> Search Results
         </Divider>
         <List
           itemLayout="horizontal"
@@ -105,7 +106,7 @@ const ProductList = (props) => {
                 shape="circle"
                 type="primary"
               >
-                <Icon type="plus" />
+                <PlusCircleOutlined />
               </Button>
             </List.Item>
           )}

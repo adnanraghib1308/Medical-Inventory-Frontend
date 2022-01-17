@@ -1,34 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import { Button, Table, Modal } from "antd";
+import {Button, Table, Row, Card, Col, Spin} from "antd";
 import * as request from "../../request/sales/request";
+import { DownloadOutlined } from '@ant-design/icons';
+import moment from "moment";
+import Filter from './Filter';
+import PageOverview from "../../component/PageOverview";
+import withErrorHandler from '../../helpers/withErrorHandler';
 const { isProduction, BASE_API_URL, LOCAL_BASE_URL} = require('../../helpers/constant');
 
 const API_URL = isProduction ? BASE_API_URL : LOCAL_BASE_URL;
-
-
-
-const productColumns = [
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Stock",
-    dataIndex: "stock",
-    key: "stock",
-  },
-  {
-    title: "Cost Price",
-    dataIndex: "cost_price",
-    key: "cost_price",
-  },
-  {
-    title: "Selling Price",
-    dataIndex: "selling_price",
-    key: "selling_price",
-  },
-];
 
 const Sales = () => {
   const [salesData, setSalesData] = useState([]);
@@ -38,6 +18,11 @@ const Sales = () => {
 
   const columns = [
   {
+    title: "Order No.",
+    dataIndex: "order_number",
+    key: "order_number",
+  },
+    {
     title: "Customer Name",
     dataIndex: "customer_name",
     key: "name",
@@ -48,6 +33,11 @@ const Sales = () => {
     key: "contact_number",
   },
   {
+    title: "Sale Amount",
+    dataIndex: "amount",
+    key: "amount",
+  },
+    {
     title: "Sale Date",
     dataIndex: "createdAt",
     key: "createdAt",
@@ -57,41 +47,47 @@ const Sales = () => {
     key: "action",
     render: (text, record) => (
       <div>
-        <Button type='primary' style={{marginRight: '20px'}} onClick = {() => {
-          setSelectedProducts(record.products);
-          setIsModalVisible(true);
-        }}>View Product</Button>
         <a
           target="_blank"
           href={`${API_URL}billing/download/?file_path=${record.bill_path}`}
         >
-          <Button type="primary">Download invoice</Button>
+          <Button type="dashed" block icon={<DownloadOutlined />}>Invoice</Button>
         </a>
       </div>
     ),
   },
 ];
 
-  const loadData = async () => {
+  const loadData = withErrorHandler(async (filter) => {
     setLoader(true);
-    const { data: sales } = await request.getAllSalesData();
-    setSalesData(sales);
+    const { data: sales } = await request.getAllSalesData(filter);
+    const formatSalesData = sales.map(item => ({
+      ...item,
+      createdAt: moment(item.createdAt).format('MMMM Do YYYY HH:MM'),
+      amount: '₹' + item.amount
+    }))
+    setSalesData(formatSalesData);
     setLoader(false);
-  };
-
-  const handleOk = () => setIsModalVisible(false);
-  const handleCancel = () => setIsModalVisible(false);
+  });
 
   useEffect(() => {
-    loadData();
+    loadData({});
   }, []);
+
   return (
-    <div>
-      <Table dataSource={salesData} columns={columns} loading={loader}></Table>
-      <Modal title="Sold Product Details" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <Table dataSource={selectedProducts} columns={productColumns}></Table>
-      </Modal>
-    </div>
+    <Row gutter={[16, 16]}>
+      <Col span={24}>
+        <PageOverview title={"Sales Data"} description={"Track your sales data from here. Search for any of your previous sales record using customer name, customer number, order number or sales date. You can also download the sale invoice"} />
+      </Col>
+      <Col span={24}>
+        <Filter loadData={loadData}/>
+      </Col>
+      <Col span={24}>
+        <Card>
+          <Table dataSource={salesData} columns={columns} loading={loader}></Table>
+        </Card>
+      </Col>
+    </Row>
   );
 }
 

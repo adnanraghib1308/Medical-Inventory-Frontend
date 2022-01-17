@@ -25,7 +25,6 @@ const App = () => {
   console.log(">>>>history>>>>", history);
   return (
     <Router history={history}>
-      <div>
         <BaseLayout>
           <div className="container mt-3">
             <Switch>
@@ -35,15 +34,13 @@ const App = () => {
               <ProtectedRoute exact path="/profile" component={Profile} />
               <ProtectedRoute exact path="/inventory" component={InventoryHome} />
               <ProtectedRoute exact path="/inventory/add" component={AddInventory} />
+              <ProtectedRoute exact path="/inventory/edit/:id" component={AddInventory} />
               <ProtectedRoute exact path="/inventory/list" component={ListInventory} />
               <ProtectedRoute exact path="/bill" component={Billing} />
               <ProtectedRoute exact path="/sales" component={Sales} />
             </Switch>
           </div>
         </BaseLayout>
-
-        {/* <AuthVerify logOut={logOut}/> */}
-      </div>
     </Router>
   );
 };
