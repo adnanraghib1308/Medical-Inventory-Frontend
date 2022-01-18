@@ -49,19 +49,19 @@ const Login = ({history}) => {
 
     if (checkBtn.current.context._errors.length === 0) {
       const { user, token } = await request.signInUser({email, password});
-      
+
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", token);
       dispatch({
         type: LOGIN_SUCCESS,
         payload: { user },
       })
-      localStorage.setItem("user", JSON.stringify(user));
-      localStorage.setItem("token", token);
-      history.push('/profile');
+      history.push('/');
     }
   });
 
   if (isLoggedIn) {
-    return <Redirect to="/profile" />;
+    return <Redirect to="/" />;
   }
 
   return (
