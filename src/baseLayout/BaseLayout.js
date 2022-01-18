@@ -104,7 +104,6 @@ const BaseLayout = ({ user, children, sider = {}}) => {
       <Sider
         style={{overflow: 'auto', height: "100vh", position: 'relative', left: 0}}
         breakpoint="lg"
-        width={230}
         collapsedWidth={0}
         collapsed = {menuToggleState}
         collapsible trigger={null}
@@ -119,7 +118,7 @@ const BaseLayout = ({ user, children, sider = {}}) => {
               {!menuToggleState && <MenuUnfoldOutlined onClick={collapseTrigger} style={{color: '#fff', fontSize: '30px', float: 'left', marginTop: '17px'}}/>}
             </Col>
             <Col span = {20}>
-              <Title style={{color: "#fff", margin: 10, textAlign: 'center'}} level={2}>{'Medical Inventory Management'}</Title>
+              <Title style={{color: "#fff", margin: 10, textAlign: 'center'}} level={2}>{'Medical Shop'}</Title>
             </Col>
             <Col span = {2}>
               { isLoggedIn && <Button type = 'primary' onClick = {userLogout}>Log Out</Button> }
